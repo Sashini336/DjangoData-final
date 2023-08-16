@@ -1,6 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from Ads.automoto import scrape_single_ad
+from Ads.mobile import scrape_single_ad_mobile
 from .models import Ads, Image, MainImage, Price
 from .serializers import AdsSerializer
 from rest_framework import viewsets
@@ -25,7 +26,14 @@ def add_url(request):
     elif request.method == 'POST':
         data = request.data
         url = data.get("data")
-        ad_data = scrape_single_ad(url)
+        ad_data = None
+        
+        if "automoto.bg" in url:
+            ad_data = scrape_single_ad(url)
+        elif "mobile.bg" in url:
+            ad_data = scrape_single_ad_mobile(url)
+        else:
+            print("Грешен URL")
 
         if ad_data:
             image_urls = ad_data.pop("image_urls")

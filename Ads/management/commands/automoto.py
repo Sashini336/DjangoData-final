@@ -10,7 +10,15 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         url = kwargs['url']
         print(f"Fetching data from URL: {url}")
-
-        ad_info = scrape_single_ad(url)
-        ad_info = scrape_single_ad_mobile(url)
         
+        if "automoto.bg" in url:
+            ad_info = scrape_single_ad(url)
+        elif "mobile.bg" in url:
+            ad_info = scrape_single_ad_mobile(url)
+        else:
+            print("Грешен URL")
+            return
+        
+        
+        
+        print(ad_info)
