@@ -1,3 +1,4 @@
+import re
 import requests
 from bs4 import BeautifulSoup
 
@@ -57,7 +58,12 @@ def extract_info(soup, link):
     
     price_element = price_element_find.find('p', class_='detail-price')
     
-    price = price_element.text.strip()
+    price_text = price_element.text.strip()
+    
+    price_numbers = re.findall(r'\d+', price_text)
+    
+    
+    price = ''.join(price_numbers)
     
     more_information = extract_more_information(soup)
 

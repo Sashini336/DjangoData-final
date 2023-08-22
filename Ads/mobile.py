@@ -1,3 +1,4 @@
+import re
 import requests
 from bs4 import BeautifulSoup
 
@@ -21,7 +22,11 @@ def extract_info(soup, link):
 
     price_div = soup.find('span' , id="details_price")
     
-    price = price_div.text.strip()
+    price_text = price_div.text.strip()
+    
+    price_numbers = re.findall(r'\d+', price_text)
+    
+    price = ''.join(price_numbers)
     
     main_image_holder = soup.find('img', id="bigPictureCarousel")
     
