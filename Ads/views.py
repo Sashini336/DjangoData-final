@@ -27,7 +27,7 @@ def add_url(request):
         data = request.data
         url = data.get("data")
         ad_data = None
-        
+
         if "automoto.bg" in url:
             ad_data = scrape_single_ad(url)
         elif "mobile.bg" in url:
@@ -36,25 +36,18 @@ def add_url(request):
             print("Грешен URL")
 
         if ad_data:
-            image_urls = ad_data.pop("image_urls")
-            price = ad_data.pop("price")
+            price = ad_data.get("price")  
 
             try:
                 ad_instance = Ads.objects.get(url=url)
-                return Response({"message": "Ad already exists"})
+                Price.objects.create(price=price, ad=ad_instance)  # Create a new Price instance with the scraped price
+                return Response({"message": "Price updated"})
             except Ads.DoesNotExist:
-                ad_instance = Ads.objects.create(**ad_data)
+                ad_instance = Ads.objects.create(url=url)
+                Price.objects.create(price=price, ad=ad_instance)  # Create a new Price instance with the scraped price
 
-                image_instances = []
-                for image_url in image_urls:
-                    image_instance, created = Image.objects.get_or_create(ad=ad_instance, image=image_url)
-                    image_instances.append(image_instance)
-                
-                ad_instance.images.set(image_instances)
-                price_instance = Price.objects.create(price=price, ad=ad_instance)
-                
                 print('Success: Data processed and saved')
         else:
             print('Error: Failed to scrape ad information')
-        
+
         return Response({"message": "Raboti"})

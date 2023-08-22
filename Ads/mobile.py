@@ -53,8 +53,8 @@ def extract_info(soup, link):
         "horsepower": 5,
         "transmission": 9,
         # "type": 11,
-        "millage": 13,
-        "color": 15,
+        "millage": 15,
+        "color": 17,
     }
 
     specs_dict = {}  

@@ -32,4 +32,4 @@ class Price(models.Model):
     date = models.DateField((""),auto_now_add=True)
     ad = models.ForeignKey(Ads, default='', related_name='price', max_length=255, on_delete=models.CASCADE)
     class Meta:
-        ordering = ['-date']
+        ordering = ['date']
